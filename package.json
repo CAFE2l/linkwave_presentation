@@ -1,0 +1,10 @@
+{
+  "name": "linkwave-presentation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 5174",
+    "build": "node -e \"const fs = require('fs'); const html = fs.readFileSync('index.html', 'utf8'); if (!html.includes('presentation-stage')) throw new Error('presentation-stage missing'); if ((html.match(/=> h\\\\(SlideFrame/g) || []).length !== 10) throw new Error('expected 10 slides'); console.log('Static presentation build check passed');\""
+  }
+}

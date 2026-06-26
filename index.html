@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#020814" />
+  <title>LinkWave - Apresentação</title>
+  <link rel="icon" type="image/png" href="./imgs/icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --bg: #020814;
+      --panel: rgba(8, 25, 43, 0.62);
+      --panel-strong: rgba(10, 36, 58, 0.78);
+      --line: rgba(139, 231, 255, 0.24);
+      --line-strong: rgba(139, 231, 255, 0.42);
+      --text: #effbff;
+      --muted: #a8c2cf;
+      --cyan: #49d9ff;
+      --sky: #70b7ff;
+      --mint: #8cffc1;
+      --green: #5df29d;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #020814;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    button { font: inherit; }
+
+    #app {
+      width: min(100vw, 177.78vh);
+      height: min(100vh, 56.25vw);
+      aspect-ratio: 16 / 9;
+      margin: auto;
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(73, 217, 255, 0.28), transparent 28%),
+        radial-gradient(circle at 84% 20%, rgba(140, 255, 193, 0.18), transparent 27%),
+        radial-gradient(circle at 50% 98%, rgba(64, 133, 255, 0.22), transparent 31%),
+        linear-gradient(150deg, #020814 0%, #03111f 42%, #05201d 100%);
+      box-shadow: 0 0 0 1px rgba(139, 231, 255, 0.08), 0 34px 100px rgba(0, 0, 0, 0.44);
+    }
+
+    .ambient, .bubbles, .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient::before,
+    .ambient::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(18px);
+      opacity: 0.72;
+    }
+
+    .ambient::before {
+      width: 42%;
+      aspect-ratio: 1;
+      left: -12%;
+      top: 14%;
+      background: radial-gradient(circle, rgba(73, 217, 255, 0.19), transparent 68%);
+      animation: drift 15s var(--ease) infinite alternate;
+    }
+
+    .ambient::after {
+      width: 48%;
+      aspect-ratio: 1;
+      right: -13%;
+      bottom: -15%;
+      background: radial-gradient(circle, rgba(93, 242, 157, 0.17), transparent 68%);
+      animation: drift 18s var(--ease) infinite alternate-reverse;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(3%, -4%, 0) scale(1.08); }
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -8%;
+      border-radius: 50%;
+      border: 1px solid rgba(223,251,255,0.26);
+      background: radial-gradient(circle at 32% 24%, rgba(255,255,255,0.38), rgba(73,217,255,0.06) 44%, transparent 72%);
+      animation: bubbleUp linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes bubbleUp {
+      0% { transform: translateY(0) scale(0.75); opacity: 0; }
+      12% { opacity: 0.4; }
+      90% { opacity: 0.22; }
+      100% { transform: translateY(-112vh) scale(1.18); opacity: 0; }
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(140,255,193,0.72);
+      box-shadow: 0 0 14px rgba(140,255,193,0.72);
+      animation: pulse 2600ms ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.2; transform: scale(0.6); }
+      50% { opacity: 1; transform: scale(1.35); }
+    }
+
+    .slides {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: clamp(30px, 4.1vw, 56px) clamp(34px, 5vw, 76px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(100%);
+      transition: transform 760ms var(--ease), opacity 520ms ease;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .slide.before { transform: translateY(-100%); }
+    .slide.after { transform: translateY(100%); }
+
+    .slide-inner {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      align-content: center;
+      gap: clamp(14px, 1.8vw, 24px);
+      position: relative;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      align-items: center;
+      gap: clamp(24px, 4.2vw, 64px);
+      min-height: 0;
+    }
+
+    .stack { display: grid; gap: clamp(14px, 1.6vw, 22px); }
+    .center { text-align: center; justify-items: center; }
+
+    .slide-kicker {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 12px;
+      border: 1px solid rgba(139, 231, 255, 0.24);
+      border-radius: 999px;
+      background: rgba(73, 217, 255, 0.08);
+      color: var(--mint);
+      font-size: clamp(10px, 0.9vw, 12px);
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    h1 {
+      max-width: 860px;
+      font-size: clamp(58px, 8.2vw, 112px);
+      line-height: 0.9;
+      font-weight: 900;
+      text-shadow: 0 0 52px rgba(73, 217, 255, 0.28);
+    }
+
+    h2 {
+      max-width: 920px;
+      font-size: clamp(30px, 4.55vw, 62px);
+      line-height: 1;
+      font-weight: 900;
+      text-wrap: balance;
+    }
+
+    h3 {
+      font-size: clamp(16px, 1.45vw, 22px);
+      line-height: 1.16;
+      font-weight: 800;
+    }
+
+    .lead {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(15px, 1.45vw, 21px);
+      line-height: 1.42;
+      font-weight: 500;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: clamp(12px, 1vw, 14px);
+      line-height: 1.48;
+    }
+
+    .gradient-text {
+      background: linear-gradient(115deg, #effbff 0%, #60ddff 42%, #8cffc1 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .glass {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.035)),
+        var(--panel);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(22px) saturate(150%);
+    }
+
+    .card {
+      padding: clamp(14px, 1.45vw, 22px);
+      min-height: 0;
+      display: grid;
+      gap: 9px;
+      align-content: start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(125deg, rgba(255, 255, 255, 0.11), transparent 34%);
+      pointer-events: none;
+    }
+
+    .card > * { position: relative; }
+
+    .grid {
+      display: grid;
+      gap: clamp(10px, 1.2vw, 15px);
+      min-height: 0;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+    .badge-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 7px 11px;
+      border: 1px solid rgba(139, 231, 255, 0.22);
+      border-radius: 999px;
+      background: rgba(73, 217, 255, 0.075);
+      color: #dffbff;
+      font-size: clamp(11px, 0.95vw, 13px);
+      font-weight: 800;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      white-space: nowrap;
+    }
+
+    .badge.mint {
+      border-color: rgba(140, 255, 193, 0.28);
+      background: rgba(93, 242, 157, 0.08);
+      color: #cbffe0;
+    }
+
+    .brand-mark {
+      width: clamp(82px, 8.5vw, 118px);
+      height: clamp(82px, 8.5vw, 118px);
+      display: grid;
+      place-items: center;
+      border-radius: 28px;
+      border: 1px solid rgba(212, 251, 255, 0.3);
+      background:
+        radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.68), transparent 14%),
+        linear-gradient(145deg, rgba(73, 217, 255, 0.28), rgba(93, 242, 157, 0.18));
+      box-shadow: 0 0 58px rgba(73, 217, 255, 0.32), inset 0 2px 0 rgba(255, 255, 255, 0.45);
+      animation: float 5s var(--ease) infinite;
+      overflow: hidden;
+    }
+
+    .brand-mark img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.28));
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .names {
+      color: #d9faff;
+      font-size: clamp(15px, 1.45vw, 20px);
+      font-weight: 800;
+    }
+
+    .problem-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-content: center;
+    }
+
+    .source-pill {
+      min-height: 54px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(139,231,255,0.2);
+      color: #dffbff;
+      font-weight: 800;
+      font-size: clamp(12px, 1.08vw, 15px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .source-pill > img {
+      width: clamp(24px, 2.3vw, 34px);
+      height: clamp(24px, 2.3vw, 34px);
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .icon-img {
+      width: clamp(24px, 2.3vw, 34px);
+      height: clamp(24px, 2.3vw, 34px);
+      object-fit: contain;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.24));
+    }
+
+    .fallback-icon {
+      width: clamp(24px, 2.3vw, 34px);
+      height: clamp(24px, 2.3vw, 34px);
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: linear-gradient(145deg, rgba(73,217,255,0.24), rgba(140,255,193,0.14));
+      border: 1px solid rgba(139,231,255,0.2);
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .phone-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: min(72vh, 510px);
+      perspective: 1200px;
+      cursor: default;
+    }
+
+    .phone-tilt {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transition: transform 0.8s var(--ease);
+      will-change: transform;
+    }
+
+    .phone-wrap {
+      position: relative;
+      width: clamp(190px, 21vw, 270px);
+      aspect-ratio: 500 / 938;
+      flex-shrink: 0;
+      transform-style: preserve-3d;
+      will-change: transform;
+      animation: phoneEntrance 2.2s var(--ease) forwards;
+    }
+
+    .phone-wrap.phone-float { animation: phoneFloatHD 7s ease-in-out infinite alternate; }
+
+    .phone-wrap img.frame {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      position: relative;
+      z-index: 3;
+      pointer-events: none;
+      filter: drop-shadow(0 30px 45px rgba(0,0,0,0.34));
+    }
+
+    .phone-light-sweep {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      border-radius: 24px;
+      background: linear-gradient(110deg, transparent 15%, rgba(255,255,255,0.58) 25%, rgba(255,255,255,0.82) 28%, rgba(255,255,255,0.30) 33%, transparent 42%);
+      background-size: 300% 100%;
+      background-position: 100% 0;
+      opacity: 0;
+      animation: lightSweep 2.4s var(--ease) 0.45s forwards, lightBreathe 5s ease-in-out 3s infinite alternate;
+    }
+
+    @keyframes lightSweep {
+      0% { opacity: 0; background-position: 80% 0; }
+      15% { opacity: 0.85; }
+      45% { opacity: 0.48; background-position: 20% 0; }
+      70% { opacity: 0.15; background-position: 0% 0; }
+      100% { opacity: 0.08; background-position: 0% 0; }
+    }
+
+    @keyframes lightBreathe {
+      0% { opacity: 0.04; background-position: 0% 0; }
+      50% { opacity: 0.10; background-position: 40% 0; }
+      100% { opacity: 0.04; background-position: 0% 0; }
+    }
+
+    @keyframes phoneEntrance {
+      0% { transform: perspective(1300px) translateZ(-420px) rotateY(40deg) rotateX(-12deg) rotateZ(5deg) scale(0.1); filter: blur(16px); opacity: 0; }
+      16% { transform: perspective(1000px) translateZ(-120px) rotateY(18deg) rotateX(-5deg) rotateZ(1deg) scale(0.52); filter: blur(5px); opacity: 1; }
+      36% { transform: perspective(800px) translateZ(15px) rotateY(-1deg) rotateX(3deg) rotateZ(-1deg) scale(1.05); filter: blur(0); }
+      62% { transform: perspective(800px) rotateY(-1deg) rotateX(2deg) rotateZ(-1deg) translateY(-4px) scale(1); }
+      100% { transform: perspective(800px) rotateY(-2deg) rotateX(2deg) rotateZ(-2deg) translateY(0) scale(1); }
+    }
+
+    @keyframes phoneFloatHD {
+      0% { transform: perspective(800px) rotateY(-2.5deg) rotateX(2.5deg) rotateZ(-2deg) translateY(0); }
+      20% { transform: perspective(800px) rotateY(0deg) rotateX(-1deg) rotateZ(0deg) translateY(-7px); }
+      40% { transform: perspective(800px) rotateY(1.5deg) rotateX(-2deg) rotateZ(1.5deg) translateY(-14px); }
+      55% { transform: perspective(800px) rotateY(3deg) rotateX(-1deg) rotateZ(2.5deg) translateY(-10px); }
+      70% { transform: perspective(800px) rotateY(-1deg) rotateX(3deg) rotateZ(-0.5deg) translateY(-5px); }
+      85% { transform: perspective(800px) rotateY(-3deg) rotateX(1deg) rotateZ(-2.5deg) translateY(-2px); }
+      100% { transform: perspective(800px) rotateY(-1.5deg) rotateX(1.5deg) rotateZ(-1deg) translateY(0); }
+    }
+
+    .phone-screen {
+      position: absolute;
+      z-index: 1;
+      top: 8.5%;
+      left: 10.5%;
+      width: 79%;
+      height: 82%;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(73,217,255,0.22), transparent 40%),
+        rgba(255,255,255,0.12);
+      backdrop-filter: blur(24px) saturate(200%);
+      border-radius: 16px;
+      padding: 13% 5% 5%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+    }
+
+    .phone-screen::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.03) 50%, transparent 100%);
+      border-radius: 16px 16px 0 0;
+      pointer-events: none;
+    }
+
+    .phone-bg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 130%;
+      height: 118%;
+      border-radius: 80px;
+      background: radial-gradient(ellipse, rgba(125,216,252,0.24) 0%, rgba(134,239,172,0.14) 35%, rgba(255,255,255,0.05) 70%, transparent 100%);
+      filter: blur(58px);
+      z-index: -1;
+      pointer-events: none;
+      animation: glowPulse 4s ease-in-out infinite alternate;
+      transition: all 1s var(--ease);
+    }
+
+    .phone-container:hover .phone-bg-glow {
+      width: 160%;
+      height: 150%;
+      filter: blur(80px);
+      background: radial-gradient(ellipse, rgba(56,189,248,0.35) 0%, rgba(134,239,172,0.20) 30%, rgba(255,255,255,0.08) 60%, transparent 100%);
+    }
+
+    @keyframes glowPulse {
+      0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.95); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+    }
+
+    .phone-avatar {
+      width: 23%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      border: 2px solid rgba(125,216,252,0.65);
+      box-shadow: 0 0 18px rgba(56,189,248,0.32);
+      background: linear-gradient(145deg, var(--cyan), var(--green));
+      margin-bottom: 3%;
+    }
+
+    .phone-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .phone-name {
+      position: relative;
+      z-index: 2;
+      color: #effbff;
+      font-size: clamp(11px, 1.15vw, 15px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 2%;
+    }
+
+    .phone-bio {
+      position: relative;
+      z-index: 2;
+      color: rgba(223,251,255,0.72);
+      font-size: clamp(8px, 0.78vw, 11px);
+      font-weight: 700;
+      margin-bottom: 6%;
+      text-align: center;
+    }
+
+    .phone-link-aero {
+      position: relative;
+      z-index: 2;
+      width: 92%;
+      min-height: clamp(28px, 3vw, 38px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 9px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(223,251,255,0.18);
+      color: #effbff;
+      font-size: clamp(8px, 0.78vw, 11px);
+      font-weight: 850;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.16);
+    }
+
+    .phone-link-aero img {
+      width: 15px;
+      height: 15px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .phone-badge-aero {
+      position: relative;
+      z-index: 2;
+      margin-top: auto;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(140,255,193,0.34);
+      background: rgba(93,242,157,0.08);
+      color: #cbffe0;
+      font-size: clamp(8px, 0.75vw, 10px);
+      font-weight: 900;
+    }
+
+    .tech-card {
+      min-height: 92px;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .tech-logo {
+      width: clamp(34px, 3.6vw, 50px);
+      height: clamp(34px, 3.6vw, 50px);
+      object-fit: contain;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.24));
+    }
+
+    .flow {
+      width: min(570px, 100%);
+      margin-inline: auto;
+      display: grid;
+      gap: 6px;
+    }
+
+    .flow-node {
+      min-height: 40px;
+      display: grid;
+      place-items: center;
+      padding: 9px 14px;
+      color: #effbff;
+      font-size: clamp(12px, 1.08vw, 15px);
+      font-weight: 850;
+      text-align: center;
+    }
+
+    .flow-arrow {
+      color: var(--mint);
+      text-align: center;
+      font-size: clamp(14px, 1.4vw, 20px);
+      line-height: 1;
+      text-shadow: 0 0 18px rgba(93,242,157,0.42);
+    }
+
+    .db-diagram {
+      min-height: 360px;
+      justify-content: center;
+      align-content: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(15px, 1.55vw, 21px);
+      color: #dffbff;
+    }
+
+    .db-row {
+      display: grid;
+      gap: 9px;
+      justify-items: start;
+    }
+
+    .db-branch {
+      margin-left: clamp(20px, 2.5vw, 40px);
+      display: grid;
+      gap: 9px;
+      color: #b7ecff;
+    }
+
+    .metric {
+      min-height: 112px;
+      padding: clamp(15px, 1.6vw, 22px);
+      display: grid;
+      align-content: center;
+      gap: 6px;
+    }
+
+    .metric strong {
+      color: var(--text);
+      font-size: clamp(24px, 3vw, 40px);
+      line-height: 1;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: clamp(11px, 0.98vw, 13px);
+      font-weight: 750;
+    }
+
+    .chart-panel {
+      min-height: 178px;
+      padding: 16px;
+      display: grid;
+      align-content: end;
+      gap: 12px;
+    }
+
+    .bars {
+      height: 110px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      align-items: end;
+    }
+
+    .bar {
+      min-height: 18px;
+      border-radius: 8px 8px 3px 3px;
+      background: linear-gradient(180deg, var(--cyan), var(--mint));
+      box-shadow: 0 0 18px rgba(73,217,255,0.28);
+    }
+
+    .rank-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .rank-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      color: #dffbff;
+      font-size: clamp(11px, 1vw, 14px);
+      font-weight: 800;
+    }
+
+    .rank-line {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(139,231,255,0.12);
+      overflow: hidden;
+    }
+
+    .rank-line span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--mint));
+    }
+
+    .map-dots {
+      position: relative;
+      min-height: 178px;
+      overflow: hidden;
+    }
+
+    .map-dots::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(139,231,255,0.2);
+      background:
+        radial-gradient(circle at 40% 45%, rgba(73,217,255,0.12), transparent 28%),
+        radial-gradient(circle at 68% 56%, rgba(140,255,193,0.12), transparent 24%);
+    }
+
+    .map-dot {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 18px rgba(140,255,193,0.8);
+    }
+
+    .video-shell {
+      height: min(100%, 610px);
+      padding: clamp(14px, 1.5vw, 24px);
+      display: grid;
+      place-items: center;
+      border-color: rgba(139, 231, 255, 0.34);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(73, 217, 255, 0.18), transparent 42%),
+        linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.035)),
+        rgba(6, 24, 40, 0.7);
+    }
+
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      border: 1px solid rgba(139, 231, 255, 0.24);
+      background:
+        linear-gradient(rgba(139,231,255,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,231,255,0.07) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(73,217,255,0.2), transparent 46%),
+        rgba(0, 0, 0, 0.18);
+      background-size: 26px 26px, 26px 26px, auto, auto;
+      text-align: center;
+      padding: 26px;
+    }
+
+    .play {
+      width: clamp(60px, 6vw, 82px);
+      height: clamp(60px, 6vw, 82px);
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid rgba(216,251,255,0.4);
+      background: linear-gradient(145deg, rgba(73,217,255,0.35), rgba(93,242,157,0.22));
+      box-shadow: 0 0 42px rgba(73,217,255,0.28);
+      color: white;
+      font-size: clamp(24px, 2.4vw, 34px);
+    }
+
+    .wave-glow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 48%;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(216,251,255,0.2), transparent 12%),
+        radial-gradient(circle, rgba(73,217,255,0.22), transparent 58%);
+      filter: blur(4px);
+      z-index: -1;
+    }
+
+    .ui-chrome {
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .brand {
+      top: 20px;
+      left: 24px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #e9fcff;
+      font-weight: 900;
+      font-size: clamp(11px, 1vw, 14px);
+    }
+
+    .brand img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(73,217,255,0.35));
+    }
+
+    .counter {
+      right: 24px;
+      top: 20px;
+      min-width: 86px;
+      padding: 8px 10px;
+      border: 1px solid rgba(139,231,255,0.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.11), rgba(255,255,255,0.035)),
+        rgba(8, 25, 43, 0.62);
+      box-shadow: 0 18px 46px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.1);
+      backdrop-filter: blur(18px) saturate(150%);
+      color: rgba(223, 251, 255, 0.82);
+      text-align: right;
+    }
+
+    .presenter-name {
+      display: block;
+      color: var(--mint);
+      font-size: 10px;
+      line-height: 1.1;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .slide-count {
+      display: block;
+      margin-top: 4px;
+      color: rgba(223, 251, 255, 0.72);
+      font-size: 11px;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .progress {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .progress-fill {
+      width: 10%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--sky), var(--mint));
+      box-shadow: 0 0 18px rgba(73,217,255,0.7);
+      transition: width 500ms var(--ease);
+    }
+
+    .dots {
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: grid;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(223, 251, 255, 0.26);
+      cursor: pointer;
+      transition: height 260ms var(--ease), background 260ms ease, box-shadow 260ms ease;
+    }
+
+    .dot.active {
+      height: 23px;
+      background: linear-gradient(180deg, var(--cyan), var(--mint));
+      box-shadow: 0 0 14px rgba(73,217,255,0.5);
+    }
+
+    .hint {
+      left: 24px;
+      bottom: 18px;
+      color: rgba(223, 251, 255, 0.5);
+      font-size: 10px;
+      font-weight: 700;
+      transition: opacity 300ms ease;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .active .reveal {
+      animation: reveal 700ms var(--ease) forwards;
+      animation-delay: calc(var(--d, 0) * 80ms + 110ms);
+    }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-aspect-ratio: 4 / 3) {
+      .slide { padding: 54px 32px 42px; }
+      .content-grid { grid-template-columns: 1fr; gap: 18px; }
+      .slide-inner { align-content: center; }
+      .grid-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .phone-container { min-height: 320px; }
+      .phone-wrap { width: 180px; }
+      .video-placeholder { min-height: 320px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="ambient"></div>
+    <div class="bubbles" id="bubbles"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="brand ui-chrome" aria-hidden="true">
+      <img src="imgs/icon.png" alt="" />
+      LinkWave
+    </div>
+    <div class="counter ui-chrome" id="counter">
+      <span class="presenter-name">Lucas</span>
+      <span class="slide-count">01 / 10</span>
+    </div>
+    <div class="hint ui-chrome" id="hint">Espaco avanca - Shift + Espaco volta - F fullscreen</div>
+    <div class="dots ui-chrome" id="dots" aria-label="Navegacao dos slides"></div>
+    <div class="progress ui-chrome"><div class="progress-fill" id="progressFill"></div></div>
+
+    <main class="slides" id="slides" aria-live="polite"></main>
+  </div>
+
+  <script>
+    const localIcons = {
+      Instagram: "imgs/icons/Instagram.png",
+      YouTube: "imgs/icons/Youtube.png",
+      TikTok: "imgs/icons/TikTok.png",
+      WhatsApp: "imgs/icons/Whatsapp.png",
+      LinkedIn: "imgs/icons/LinkedIn.png",
+      Git: "imgs/icons/github.png",
+      Loja: "imgs/icons/Mercadopago.png",
+      Portfolio: "imgs/icons/Google_Chrome.png"
+    };
+
+    const techIcons = {
+      "Next.js 15": "https://cdn.simpleicons.org/nextdotjs/FFFFFF",
+      React: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+      TypeScript: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+      "Tailwind CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+      Supabase: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg",
+      PostgreSQL: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+      Zod: "https://cdn.simpleicons.org/zod/3E67B1",
+      Recharts: "https://api.iconify.design/solar:chart-2-bold-duotone.svg?color=%2349d9ff",
+      "Framer Motion": "https://cdn.simpleicons.org/framer/49D9FF",
+      Playwright: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/playwright/playwright-original.svg"
+    };
+
+    const presenters = ["CAFÉ", "Lucas", "Emy"];
+    const iconLink = `<img src="imgs/icon.png" alt="Icone LinkWave" />`;
+
+    function imgIcon(name, className = "icon-img") {
+      const src = localIcons[name];
+      if (src) return `<img class="${className}" src="${src}" alt="" loading="lazy" />`;
+      return `<span class="fallback-icon" aria-hidden="true">${name.slice(0, 2).toUpperCase()}</span>`;
+    }
+
+    function phoneMockup() {
+      return `
+        <div class="phone-container">
+          <div class="phone-bg-glow"></div>
+          <div class="phone-tilt">
+            <div class="phone-wrap">
+              <div class="phone-light-sweep"></div>
+              <img src="./imgs/essential/frame.png" alt="" class="frame">
+              <div class="phone-screen">
+                <div class="phone-avatar"><img src="./imgs/essential/profile.jpg" alt=""></div>
+                <div class="phone-name">CAFÉ</div>
+                <div class="phone-bio">Criador digital - tecnologia - design</div>
+                <div class="phone-link-aero">${imgIcon("LinkedIn")}Portfolio principal</div>
+                <div class="phone-link-aero">${imgIcon("YouTube")}YouTube</div>
+                <div class="phone-link-aero">${imgIcon("Instagram")}Loja online</div>
+                <div class="phone-link-aero">${imgIcon("WhatsApp")}WhatsApp</div>
+                <div class="phone-badge-aero">+12.4k cliques</div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    const slides = [
+      {
+        title: "Capa",
+        html: `
+          <div class="content-grid">
+            <div class="stack reveal" style="--d:0">
+              <div class="brand-mark">${iconLink}</div>
+              <div class="slide-kicker">Apresentação técnica - 2026</div>
+              <h1 class="gradient-text">LinkWave</h1>
+              <p class="lead">Links para criadores, do seu jeito.</p>
+              <div class="names">Lucas - CAFÉ - Emy</div>
+            </div>
+            <div class="reveal" style="--d:3">${phoneMockup()}</div>
+          </div>`
+      },
+      {
+        title: "Problema",
+        html: `
+          <div class="content-grid">
+            <div class="stack">
+              <div class="slide-kicker reveal" style="--d:0">01 - Problema</div>
+              <h2 class="reveal" style="--d:1">Links espalhados reduzem <span class="gradient-text">clareza, conversão e profissionalismo.</span></h2>
+              <p class="lead reveal" style="--d:2">Criadores compartilham muitos destinos ao mesmo tempo. O público precisa procurar, comparar e decidir sem uma página central.</p>
+            </div>
+            <div class="grid problem-grid reveal" style="--d:3">
+              ${[
+                ["Instagram", "Instagram"],
+                ["YouTube", "YouTube"],
+                ["TikTok", "TikTok"],
+                ["GitHub", "Git"],
+                ["Portfólio", "Portfolio"],
+                ["Loja Online", "Loja"],
+                ["WhatsApp", "WhatsApp"]
+              ].map(([label, icon]) => `<div class="source-pill">${imgIcon(icon)}<span>${label}</span></div>`).join("")}
+              <div class="source-pill" style="border-color:rgba(140,255,193,0.34)">${iconLink}<span>Uma página central</span></div>
+            </div>
+          </div>`
+      },
+      {
+        title: "Solução",
+        html: `
+          <div class="content-grid">
+            <div class="stack">
+              <div class="slide-kicker reveal" style="--d:0">02 - Solução</div>
+              <h2 class="reveal" style="--d:1">Uma página única, personalizável e profissional para centralizar toda a <span class="gradient-text">presença digital.</span></h2>
+              <div class="badge-list reveal" style="--d:2">
+                ${["Perfil público","Bio","Links","Redes sociais","Tema customizado","Analytics"].map(item => `<span class="badge">${item}</span>`).join("")}
+              </div>
+            </div>
+            <div class="reveal" style="--d:3">${phoneMockup()}</div>
+          </div>`
+      },
+      {
+        title: "Tecnologias",
+        html: `
+          <div class="stack">
+            <div>
+              <div class="slide-kicker reveal" style="--d:0">03 - Tecnologias</div>
+              <h2 class="reveal" style="--d:1;margin-top:16px">Stack moderna para interface, validação, dados, analytics e testes.</h2>
+            </div>
+            <div class="grid grid-5">
+              ${Object.keys(techIcons).map((tech, i) => `
+                <article class="card glass tech-card reveal" style="--d:${i + 2}">
+                  <img class="tech-logo" src="${techIcons[tech]}" alt="${tech}">
+                  <h3>${tech}</h3>
+                </article>`).join("")}
+            </div>
+          </div>`
+      },
+      {
+        title: "Arquitetura",
+        html: `
+          <div class="content-grid">
+            <div class="stack">
+              <div class="slide-kicker reveal" style="--d:0">04 - Arquitetura</div>
+              <h2 class="reveal" style="--d:1">Fluxo cliente-servidor com validação antes da persistência.</h2>
+              <p class="lead reveal" style="--d:2">A documentação técnica separa interface, lógica de negócio, autenticação e banco de dados.</p>
+            </div>
+            <div class="flow reveal" style="--d:3">
+              ${["Usuário","Interface Web Next.js","Server Actions / API Routes","Validação com Zod","Supabase Auth","PostgreSQL","Atualização da interface"].map((step, i, arr) => `<div class="flow-node glass">${step}</div>${i < arr.length - 1 ? `<div class="flow-arrow">↓</div>` : ""}`).join("")}
+            </div>
+          </div>`
+      },
+      {
+        title: "Banco de Dados",
+        html: `
+          <div class="content-grid">
+            <div class="stack">
+              <div class="slide-kicker reveal" style="--d:0">05 - Banco de Dados</div>
+              <h2 class="reveal" style="--d:1">Modelo relacional com segurança e controle de cadastro.</h2>
+              <div class="badge-list reveal" style="--d:2">
+                ${["PostgreSQL","Supabase","Row Level Security","Rate Limit","Server Validation"].map((item, i) => `<span class="badge ${i === 2 ? "mint" : ""}">${item}</span>`).join("")}
+              </div>
+            </div>
+            <div class="glass card db-diagram reveal" style="--d:3">
+              <div class="db-row">
+                <div>auth.users</div>
+                <div style="color:var(--mint)">↓</div>
+                <div>public.users</div>
+                <div class="db-branch">
+                  <div>├── public.profiles</div>
+                  <div>├── public.links</div>
+                  <div>└── public.clicks</div>
+                </div>
+                <div style="color:var(--mint)">registration_rate_limits</div>
+              </div>
+            </div>
+          </div>`
+      },
+      {
+        title: "Ciência de Dados",
+        html: `
+          <div class="stack">
+            <div>
+              <div class="slide-kicker reveal" style="--d:0">06 - Ciência de Dados / Analytics</div>
+              <h2 class="reveal" style="--d:1;margin-top:16px">Métricas transformam cliques em decisões de produto e conteúdo.</h2>
+            </div>
+            <div class="grid grid-3">
+              ${[
+                ["340","total de usuários"],
+                ["1.2K","total de links"],
+                ["24.8K","número de cliques"]
+              ].map((item, i) => `<article class="metric glass reveal" style="--d:${i + 2}"><strong>${item[0]}</strong><span>${item[1]}</span></article>`).join("")}
+            </div>
+            <div class="grid grid-3">
+              <article class="chart-panel glass reveal" style="--d:5">
+                <h3>Evolução temporal</h3>
+                <div class="bars">${[35,48,44,66,72,58,88].map(h => `<span class="bar" style="height:${h}%"></span>`).join("")}</div>
+              </article>
+              <article class="chart-panel glass reveal" style="--d:6">
+                <h3>Ranking de links</h3>
+                <div class="rank-list">
+                  ${[["YouTube","92%"],["Loja online","74%"],["WhatsApp","61%"]].map(([name, value]) => `<div class="rank-item"><span>${name}</span><div class="rank-line"><span style="width:${value}"></span></div><span>${value}</span></div>`).join("")}
+                </div>
+              </article>
+              <article class="chart-panel glass map-dots reveal" style="--d:7">
+                <h3>Distribuição geográfica</h3>
+                ${[[32,45],[48,36],[58,52],[67,48],[42,60],[72,62]].map(([left, top]) => `<span class="map-dot" style="left:${left}%;top:${top}%"></span>`).join("")}
+              </article>
+            </div>
+          </div>`
+      },
+      {
+        title: "Demonstração ao vivo",
+        html: `
+          <div class="stack" style="height:100%">
+            <div>
+              <div class="slide-kicker reveal" style="--d:0">07 - Demonstração ao vivo / vídeo</div>
+              <h2 class="reveal" style="--d:1;margin-top:14px">Demonstração do sistema</h2>
+            </div>
+            <section class="video-shell glass reveal" style="--d:2">
+              <!-- Insira aqui a tag de video, por exemplo: <video class="video-demo" controls src="./videos/demo-linkwave.mp4"></video> -->
+              <div class="video-placeholder">
+                <div>
+                  <div class="play">▶</div>
+                  <h3>Insira aqui a gravação de tela</h3>
+                  <p class="small" style="margin-top:10px">Espaço reservado para o vídeo da demonstração ao vivo.</p>
+                </div>
+              </div>
+            </section>
+          </div>`
+      },
+      {
+        title: "Resultados",
+        html: `
+          <div class="stack">
+            <div>
+              <div class="slide-kicker reveal" style="--d:0">08 - Resultados / Diferenciais</div>
+              <h2 class="reveal" style="--d:1;margin-top:16px">Uma experiência completa para criar, medir e proteger perfis públicos.</h2>
+            </div>
+            <div class="grid grid-3">
+              ${[
+                ["Personalização avançada","Mais liberdade visual para identidade de marca."],
+                ["Frutiger Aero moderno","Interface escura, glassmorphism, brilho e reflexos."],
+                ["Fácil utilização","Fluxo simples para criar, editar e publicar links."],
+                ["Analytics integrado","KPIs, rankings, evolução temporal e localização."],
+                ["Segurança com RLS","Cada usuário altera apenas os próprios dados."],
+                ["Validação no servidor","Zod protege APIs e Server Actions críticas."]
+              ].map((item, i) => `<article class="card glass reveal" style="--d:${i + 2}"><h3>${item[0]}</h3><p class="small">${item[1]}</p></article>`).join("")}
+            </div>
+          </div>`
+      },
+      {
+        title: "Conclusão",
+        html: `
+          <div class="stack center">
+            <div class="wave-glow"></div>
+            <div class="brand-mark reveal" style="--d:0">${iconLink}</div>
+            <div class="slide-kicker reveal" style="--d:1">09 - Conclusão</div>
+            <h2 class="gradient-text reveal" style="--d:2">Obrigado!</h2>
+            <p class="lead reveal" style="--d:3">O LinkWave centraliza presença digital, personalização e dados em uma única experiência profissional.</p>
+            <div class="names reveal" style="--d:4">Lucas - CAFÉ - Emy</div>
+          </div>`
+      }
+    ];
+
+    const slidesEl = document.getElementById("slides");
+    const dotsEl = document.getElementById("dots");
+    const counterEl = document.getElementById("counter");
+    const progressEl = document.getElementById("progressFill");
+    const hintEl = document.getElementById("hint");
+    let current = 0;
+    let isAnimating = false;
+
+    function renderSlide(slide, index) {
+      return `<section class="slide ${index === 0 ? "active" : "after"}" aria-label="${String(index + 1).padStart(2, "0")} / ${slides.length}: ${slide.title}"><div class="slide-inner">${slide.html}</div></section>`;
+    }
+
+    slidesEl.innerHTML = slides.map(renderSlide).join("");
+    slides.forEach((_, index) => {
+      const dot = document.createElement("button");
+      dot.className = `dot${index === 0 ? " active" : ""}`;
+      dot.type = "button";
+      dot.setAttribute("aria-label", `Ir para slide ${index + 1}`);
+      dot.addEventListener("click", () => goTo(index));
+      dotsEl.appendChild(dot);
+    });
+
+    const slideNodes = [...document.querySelectorAll(".slide")];
+    const dotNodes = [...document.querySelectorAll(".dot")];
+
+    function formatNumber(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function updateUi() {
+      const presenter = presenters[current % presenters.length];
+      counterEl.innerHTML = `<span class="presenter-name">${presenter}</span><span class="slide-count">${formatNumber(current + 1)} / ${formatNumber(slides.length)}</span>`;
+      progressEl.style.width = `${((current + 1) / slides.length) * 100}%`;
+      dotNodes.forEach((dot, index) => dot.classList.toggle("active", index === current));
+    }
+
+    function goTo(index) {
+      if (isAnimating || index === current || index < 0 || index >= slides.length) return;
+      isAnimating = true;
+      current = index;
+      slideNodes.forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === current);
+        slide.classList.toggle("before", slideIndex < current);
+        slide.classList.toggle("after", slideIndex > current);
+      });
+      updateUi();
+      window.setTimeout(() => { isAnimating = false; }, 780);
+    }
+
+    function nextSlide() { goTo(current + 1); }
+    function previousSlide() { goTo(current - 1); }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    }
+
+    document.addEventListener("keydown", (event) => {
+      const key = event.key;
+      if (event.code === "Space") {
+        event.preventDefault();
+        event.shiftKey ? previousSlide() : nextSlide();
+      } else if (key === "ArrowDown" || key === "PageDown") {
+        event.preventDefault();
+        nextSlide();
+      } else if (key === "ArrowUp" || key === "PageUp") {
+        event.preventDefault();
+        previousSlide();
+      } else if (key === "Home") {
+        event.preventDefault();
+        goTo(0);
+      } else if (key === "End") {
+        event.preventDefault();
+        goTo(slides.length - 1);
+      } else if (key.toLowerCase() === "f") {
+        event.preventDefault();
+        toggleFullscreen();
+      }
+      hintEl.style.opacity = "0";
+    });
+
+    let touchStartY = 0;
+    document.addEventListener("touchstart", (event) => {
+      touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener("touchend", (event) => {
+      const deltaY = event.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(deltaY) > 48) deltaY < 0 ? nextSlide() : previousSlide();
+    }, { passive: true });
+
+    document.addEventListener("wheel", (event) => {
+      if (Math.abs(event.deltaY) < 42) return;
+      event.deltaY > 0 ? nextSlide() : previousSlide();
+    }, { passive: true });
+
+    document.addEventListener("animationend", (event) => {
+      if (event.animationName === "phoneEntrance" && event.target.classList.contains("phone-wrap")) {
+        event.target.classList.add("phone-float");
+      }
+    });
+
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      document.addEventListener("mousemove", (event) => {
+        const activePhone = document.querySelector(".slide.active .phone-tilt");
+        const container = document.querySelector(".slide.active .phone-container");
+        if (!activePhone || !container) return;
+        const rect = container.getBoundingClientRect();
+        const inside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+        if (!inside) {
+          activePhone.style.transform = "";
+          return;
+        }
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        activePhone.style.transform = `perspective(800px) rotateX(${(y - 0.5) * -14}deg) rotateY(${(x - 0.5) * 18}deg) scale3d(1.02,1.02,1.02)`;
+      });
+    }
+
+    const bubbles = [
+      [18, 7, 22, 0], [28, 18, 30, 5], [12, 31, 20, 9], [36, 48, 34, 2],
+      [16, 66, 24, 7], [30, 82, 32, 4], [10, 92, 18, 11], [22, 40, 28, 13]
+    ];
+    document.getElementById("bubbles").innerHTML = bubbles.map(([size, left, duration, delay]) => `<span class="bubble" style="width:${size}px;height:${size}px;left:${left}%;animation-duration:${duration}s;animation-delay:${delay}s"></span>`).join("");
+
+    const particles = [
+      [12, 16, 0], [88, 17, 5], [23, 72, 9], [72, 64, 3], [48, 22, 7], [61, 86, 12], [8, 48, 4], [93, 43, 10]
+    ];
+    document.getElementById("particles").innerHTML = particles.map(([left, top, delay]) => `<span class="particle" style="left:${left}%;top:${top}%;animation-delay:${delay * 140}ms"></span>`).join("");
+
+    updateUi();
+  </script>
+</body>
+</html>

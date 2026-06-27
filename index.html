@@ -1956,6 +1956,111 @@
       box-shadow:0 0 0 5px rgba(27,191,242,.1),0 0 20px rgba(27,191,242,.42);
     }
 
+    /* Encerramento minimalista: produto, mensagem e profundidade. */
+    .final-poster {
+      overflow: visible;
+      display: grid;
+      grid-template-rows: minmax(255px, 1.05fr) minmax(245px, .95fr);
+      place-items: center;
+    }
+    .final-poster::before {
+      inset: 0 24% 20%;
+      opacity: .72;
+    }
+    .final-orbit {
+      left: -4%;
+      top: 17%;
+      width: 31%;
+      height: 48%;
+      opacity: .28;
+      filter: saturate(.78);
+      mask-image: linear-gradient(90deg, #000 35%, rgba(0,0,0,.72) 72%, transparent 100%);
+    }
+    .final-orbit .force-graph { min-height: 100%; }
+    .final-orbit .force-edge { opacity: .28; stroke-width: 1.2; }
+    .final-orbit .force-node { opacity: .42; transform:translate(-50%,-50%) scale(.74); }
+    .final-orbit .force-node.hub { opacity: .55; }
+    .final-orbit .graph-particle { opacity: .24; }
+
+    .final-phone {
+      position: absolute;
+      left: 50%;
+      top: -4%;
+      width: 100%;
+      height: 310px;
+      z-index: 3;
+      transform: translateX(-50%);
+      transform-origin: center top;
+      filter: drop-shadow(0 22px 30px rgba(20,115,150,.15));
+      pointer-events: none;
+    }
+    .final-phone > div {
+      height: 100%;
+      transform-origin: center top;
+    }
+    .final-phone .phone-shell {
+      min-height: 520px;
+      transform: scale(.52);
+      transform-origin: center top;
+      overflow: visible;
+    }
+
+    .final-message {
+      position: absolute;
+      left: 50%;
+      bottom: 1%;
+      z-index: 5;
+      width: min(720px, 66%);
+      min-height: 255px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 7px;
+      padding: 0 20px 5px;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+    .final-message .final-title {
+      width: 100%;
+      min-height: 92px;
+      padding: .06em .08em .1em;
+      overflow: visible;
+      font-size: clamp(64px, 6.4vw, 92px);
+      line-height: 1;
+      text-align: center;
+      text-shadow: 0 12px 34px rgba(27,191,242,.13);
+    }
+    .final-thanks {
+      color: #153d50;
+      font-size: clamp(12px, 1vw, 15px);
+      line-height: 1.3;
+      font-weight: 850;
+      text-align: center;
+    }
+    .final-message .final-copy {
+      max-width: 610px;
+      color: #668795;
+      font-size: clamp(10px, .88vw, 13px);
+      line-height: 1.38;
+      font-weight: 680;
+    }
+    .final-message .final-names {
+      margin-top: 3px;
+      color: #15394b;
+      font-size: clamp(10px, .9vw, 13px);
+    }
+    .final-message .final-cta {
+      margin-top: 2px;
+      min-height: 29px;
+      padding: 6px 13px;
+      font-size: 9px;
+    }
+
     @media (max-aspect-ratio: 4 / 3) {
       .slide {
         padding: 62px 44px 42px;
@@ -2224,15 +2329,15 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
       return `M ${sx} ${sy} Q ${cx} ${cy} ${tx} ${ty}`;
     }
 
-    function buildOrbitalGraph(width, height, elapsedSeconds, sourceNodes = graphNodes) {
+    function buildOrbitalGraph(width, height, elapsedSeconds, sourceNodes = graphNodes, compact = false) {
       const centerX = width / 2;
       const centerY = height / 2;
-      const padX = 86;
-      const padY = 66;
+      const padX = compact ? 44 : 86;
+      const padY = compact ? 36 : 66;
       const orbitNodes = sourceNodes.filter((node) => !node.hub);
       const orbitSpeed = elapsedSeconds * 0.105;
-      const rx = Math.max(188, Math.min(width * 0.36, width / 2 - padX));
-      const ry = Math.max(132, Math.min(height * 0.33, height / 2 - padY));
+      const rx = Math.max(compact ? 92 : 188, Math.min(width * 0.36, width / 2 - padX));
+      const ry = Math.max(compact ? 62 : 132, Math.min(height * 0.33, height / 2 - padY));
 
       const nodes = sourceNodes.map((node) => {
         if (node.hub) {
@@ -2283,14 +2388,14 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
 
         const updateSize = () => {
           const rect = container.getBoundingClientRect();
-          width = Math.max(520, rect.width);
-          height = Math.max(380, rect.height);
+          width = Math.max(simplified ? 300 : 520, rect.width);
+          height = Math.max(simplified ? 230 : 380, rect.height);
         };
 
         const renderOrbit = (now) => {
           const finalNodeIds = new Set(["linkwave","instagram","youtube","tiktok","github","whatsapp","portfolio"]);
           const sourceNodes = simplified ? graphNodes.filter((node) => finalNodeIds.has(node.id)) : graphNodes;
-          setGraph(buildOrbitalGraph(width, height, (now - startedAt) / 1000, sourceNodes));
+          setGraph(buildOrbitalGraph(width, height, (now - startedAt) / 1000, sourceNodes, simplified));
           animationFrame = requestAnimationFrame(renderOrbit);
         };
 
@@ -2913,24 +3018,23 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
               initial: { opacity: 0, y: 30, scale: .92 },
               animate: { opacity: 1, y: 0, scale: 1 },
               transition: { duration: .8, delay: .12, ease: [0.22, 1, 0.36, 1] }
-            }, h(PhoneMockup, { focus: true, interactive: true }))
+            }, h(PhoneMockup))
           ),
           h(M.div, {
             className: "final-orbit",
             initial: { opacity: 0, x: -90, filter: "blur(8px)" },
-            animate: { opacity: .68, x: 0, filter: "blur(0px)" },
+            animate: { opacity: .28, x: 0, filter: "blur(0px)" },
             transition: { duration: .9, delay: .62, ease: [0.22, 1, 0.36, 1] }
           }, h(ForceDirectedLinkGraph, { simplified: true })),
-          h(FinalAnalyticsPanel, { data: dashboardData || csvDashboard }),
           h(M.div, {
             className: "final-message",
             initial: { opacity: 0, x: "-50%", y: 35, scale: .96 },
             animate: { opacity: 1, x: "-50%", y: 0, scale: 1 },
             transition: { duration: .8, delay: 1.46, ease: [0.22, 1, 0.36, 1] }
           },
-            h("div", { className: "final-badge" }, "CONCLUSÃO"),
             h("div", { className: "final-title" }, "Obrigado!"),
-            h("p", { className: "final-copy" }, "Obrigado por acompanhar nossa apresentação. O LinkWave centraliza toda a presença digital em uma plataforma moderna, personalizável e escalável."),
+            h("p", { className: "final-thanks" }, "Obrigado por acompanhar nossa apresentação."),
+            h("p", { className: "final-copy" }, "O LinkWave foi desenvolvido para centralizar toda a presença digital em uma única plataforma moderna, intuitiva e personalizável."),
             h("div", { className: "final-names" }, "Lucas • CAFÉ • Emy"),
             h("div", { className: "final-cta" }, "Links para criadores, do seu jeito.")
           )

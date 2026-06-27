@@ -1341,149 +1341,171 @@
     }
 
     .dashboard {
-      display: grid;
-      gap: clamp(12px, 1.2vw, 16px);
+      height: calc(min(100vh, 56.25vw) - clamp(100px, 10vw, 144px));
+      min-height: 430px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.84);
+      border-radius: clamp(18px, 1.8vw, 26px);
+      background: linear-gradient(145deg, rgba(247,253,255,.82), rgba(228,247,252,.66));
+      box-shadow: 0 26px 64px rgba(27,112,149,.18), inset 0 1px 0 #fff;
+      backdrop-filter: blur(28px) saturate(155%);
     }
 
-    .dash-header {
+    .dash-appbar {
+      height: 54px;
+      padding: 0 clamp(15px, 1.5vw, 22px);
       display: flex;
-      align-items: end;
+      align-items: center;
       justify-content: space-between;
-      gap: 18px;
+      border-bottom: 1px solid rgba(42,127,163,.13);
+      background: rgba(255,255,255,.35);
     }
 
-    .dash-header h2 {
-      font-size: clamp(26px, 3.35vw, 46px);
-      max-width: 720px;
+    .dash-title, .dash-actions, .dash-brand, .dash-filter, .dash-user {
+      display: flex;
+      align-items: center;
     }
 
-    .dash-source {
-      min-width: 210px;
-      text-align: right;
-      color: #5b7f90;
-      font-size: clamp(10px, 0.84vw, 12px);
+    .dash-brand { gap: 9px; }
+    .dash-brand img { width: 25px; height: 25px; object-fit: contain; }
+    .dash-title { gap: 15px; }
+    .dash-title strong { font-size: clamp(13px, 1.05vw, 16px); color: #0b2e40; }
+    .dash-breadcrumb { color: #7893a0; font-size: 10px; font-weight: 750; }
+    .dash-actions { gap: 10px; }
+    .dash-filter {
+      gap: 2px;
+      padding: 3px;
+      border: 1px solid rgba(43,128,163,.15);
+      border-radius: 10px;
+      background: rgba(232,247,251,.62);
+    }
+    .dash-filter button {
+      border: 0;
+      padding: 5px 8px;
+      border-radius: 7px;
+      color: #688895;
+      background: transparent;
+      font-size: 9px;
       font-weight: 850;
+      cursor: pointer;
     }
+    .dash-filter button.active {
+      color: #0c5f7a;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 3px 9px rgba(38,118,150,.12);
+    }
+    .dash-user {
+      width: 27px;
+      height: 27px;
+      justify-content: center;
+      border-radius: 9px;
+      color: white;
+      background: linear-gradient(135deg,#19b9eb,#19c989);
+      font-size: 9px;
+      font-weight: 900;
+    }
+
+    .dash-scroll {
+      height: calc(100% - 54px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(24,173,199,.48) transparent;
+      overscroll-behavior: contain;
+    }
+    .dash-scroll::-webkit-scrollbar { width: 5px; }
+    .dash-scroll::-webkit-scrollbar-thumb { background: rgba(24,173,199,.44); border-radius: 99px; }
+
+    .dash-canvas {
+      padding: clamp(13px, 1.25vw, 18px);
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: clamp(10px, .9vw, 13px);
+    }
+
+    .dash-intro { grid-column: 1 / -1; display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+    .dash-intro h2 { font-size: clamp(20px, 2vw, 29px); letter-spacing: -.04em; }
+    .dash-intro p { margin-top: 4px; color: #668895; font-size: clamp(9px,.76vw,11px); font-weight: 650; }
+    .dash-live { color: #168d68; font-size: 9px; font-weight: 850; white-space: nowrap; }
+    .dash-live::before { content:""; display:inline-block; width:6px; height:6px; margin-right:6px; border-radius:50%; background:#20cf84; box-shadow:0 0 0 4px rgba(32,207,132,.13); }
 
     .dash-kpis {
+      grid-column: 1 / -1;
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: clamp(10px, 1vw, 14px);
+      gap: clamp(8px, .8vw, 11px);
     }
-
     .exec-kpi {
-      min-height: 94px;
-      padding: clamp(12px, 1.1vw, 16px);
-      align-content: center;
-    }
-
-    .exec-kpi span {
-      color: #5d7f90;
-      font-size: clamp(10px, 0.84vw, 12px);
-      font-weight: 850;
-      text-transform: uppercase;
-    }
-
-    .exec-kpi strong {
-      color: #12384a;
-      font-size: clamp(26px, 3vw, 42px);
-      line-height: 1;
-    }
-
-    .dash-main {
+      min-height: 82px;
+      padding: clamp(10px, .95vw, 14px);
       display: grid;
-      grid-template-columns: 1.35fr 0.88fr;
-      gap: clamp(12px, 1.2vw, 16px);
-      min-height: 315px;
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: auto 1fr auto;
+      gap: 3px 9px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.58);
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: 0 9px 24px rgba(51,137,170,.09), inset 0 1px 0 #fff;
     }
+    .kpi-icon { grid-row: 1 / 3; width: 28px; height: 28px; display:grid; place-items:center; border-radius:9px; background:rgba(27,191,242,.1); }
+    .kpi-icon img { width: 18px; height: 18px; }
+    .kpi-label { color:#658493; font-size:9px; font-weight:850; text-transform:uppercase; letter-spacing:.04em; }
+    .kpi-value { align-self:end; color:#0a3043; font-size:clamp(20px,1.85vw,28px); line-height:1; font-weight:900; }
+    .kpi-trend { color:#178b67; font-size:9px; font-weight:900; }
+    .kpi-trend.down { color:#d26473; }
+    .kpi-compare { grid-column:2 / 4; color:#8aa0aa; font-size:8px; font-weight:700; }
 
     .dash-panel {
       min-height: 0;
-      padding: clamp(14px, 1.35vw, 20px);
+      padding: clamp(12px, 1vw, 15px);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.9);
+      background: rgba(255,255,255,.54);
+      box-shadow: 0 10px 26px rgba(38,125,159,.09), inset 0 1px 0 #fff;
+      transition: transform .25s ease, box-shadow .25s ease;
     }
+    .dash-panel:hover { transform: translateY(-2px); box-shadow:0 15px 32px rgba(38,125,159,.14),inset 0 1px 0 #fff; }
+    .panel-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:9px; }
+    .panel-head h3 { font-size:clamp(11px,.95vw,14px); }
+    .panel-head span { color:#7a96a3; font-size:8px; font-weight:800; }
+    .chart-main { grid-column: span 8; min-height: 230px; }
+    .activity-panel { grid-column: span 4; min-height:230px; }
+    .rank-panel { grid-column: span 7; }
+    .theme-panel { grid-column: span 5; }
+    .mini-chart { grid-column: span 4; min-height:190px; }
+    .heat-panel { grid-column: span 8; }
+    .recent-panel { grid-column: 1 / -1; }
+    .chart-wrap { height: 183px; }
+    .mini-chart .chart-wrap { height: 142px; }
+    .chart-tooltip { padding:8px 10px; border:1px solid rgba(255,255,255,.9); border-radius:10px; background:rgba(9,44,61,.9); color:white; box-shadow:0 10px 30px rgba(3,35,50,.25); font-size:9px; }
 
-    .panel-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
+    .activity-list { display:grid; gap:9px; }
+    .activity-item { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:8px; }
+    .activity-dot { width:27px; height:27px; display:grid; place-items:center; border-radius:9px; background:rgba(27,191,242,.1); }
+    .activity-dot img { width:16px; height:16px; }
+    .activity-copy strong { display:block; color:#173e4f; font-size:9px; line-height:1.25; }
+    .activity-copy span, .activity-time { color:#829ba6; font-size:8px; font-weight:700; }
 
-    .panel-head span {
-      color: #6a8b9a;
-      font-size: clamp(10px, 0.84vw, 12px);
-      font-weight: 800;
-    }
+    .premium-table { width:100%; border-collapse:collapse; }
+    .premium-table th { padding:5px 7px; color:#8299a4; font-size:8px; text-align:right; text-transform:uppercase; letter-spacing:.05em; }
+    .premium-table th:nth-child(2), .premium-table td:nth-child(2) { text-align:left; }
+    .premium-table td { padding:7px; border-top:1px solid rgba(47,129,160,.09); color:#416879; font-size:9px; font-weight:750; text-align:right; }
+    .rank-user { display:flex; align-items:center; gap:7px; color:#143a4b; font-weight:850; }
+    .rank-avatar { width:22px; height:22px; display:grid; place-items:center; border-radius:8px; color:#087b66; background:linear-gradient(135deg,rgba(27,191,242,.16),rgba(112,239,186,.24)); font-size:8px; }
+    .rank-position { color:#13a178; font-weight:900; }
 
-    .exec-line {
-      width: 100%;
-      height: 176px;
-      overflow: visible;
-    }
+    .theme-content { display:grid; grid-template-columns:145px 1fr; align-items:center; min-height:150px; }
+    .theme-legend { display:grid; gap:10px; }
+    .legend-row { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:7px; color:#527586; font-size:9px; font-weight:750; }
+    .legend-swatch { width:7px; height:7px; border-radius:50%; }
 
-    .axis-label {
-      fill: #6a8b9a;
-      font: 700 10px Inter, sans-serif;
-    }
+    .heat-grid { display:grid; grid-template-columns:repeat(12,1fr); gap:4px; padding-top:8px; }
+    .heat-cell { aspect-ratio:1.35; border-radius:4px; background:rgba(27,191,242,var(--heat)); }
+    .heat-labels { display:flex; justify-content:space-between; margin-top:7px; color:#859da7; font-size:8px; font-weight:750; }
 
-    .table-list {
-      display: grid;
-      gap: 9px;
-    }
-
-    .table-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 12px;
-      padding: 9px 10px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.44);
-      border: 1px solid rgba(255,255,255,0.7);
-    }
-
-    .table-row strong {
-      color: #15394b;
-      font-size: clamp(11px, 0.95vw, 14px);
-    }
-
-    .table-row span {
-      color: #5d7f90;
-      font-size: clamp(10px, 0.82vw, 12px);
-      font-weight: 800;
-    }
-
-    .split-bars {
-      display: grid;
-      gap: 12px;
-    }
-
-    .split-item {
-      display: grid;
-      gap: 6px;
-    }
-
-    .split-label {
-      display: flex;
-      justify-content: space-between;
-      color: #315f72;
-      font-size: clamp(10px, 0.86vw, 12px);
-      font-weight: 850;
-    }
-
-    .split-track {
-      height: 10px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(42, 152, 202, 0.12);
-    }
-
-    .split-fill {
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #1bbff2, #70efba);
-    }
+    .event-stream { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+    .event-card { display:flex; gap:8px; align-items:center; padding:9px; border-radius:11px; background:rgba(236,248,251,.65); border:1px solid rgba(255,255,255,.86); }
+    .event-card strong { display:block; color:#183e50; font-size:9px; }
+    .event-card span { color:#7d97a2; font-size:8px; font-weight:700; }
 
     .diff-card {
       min-height: 132px;
@@ -1812,6 +1834,128 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.94), 0 12px 28px rgba(32,207,132,0.1);
     }
 
+    .final-poster {
+      position: relative;
+      width: 100%;
+      height: calc(min(100vh, 56.25vw) - clamp(98px, 10vw, 142px));
+      min-height: 470px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .final-poster::before {
+      content: "";
+      position: absolute;
+      inset: 5% 18% 12%;
+      z-index: -1;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 48% 42%, rgba(255,255,255,.9), transparent 20%),
+        radial-gradient(circle at 42% 46%, rgba(27,191,242,.28), transparent 44%),
+        radial-gradient(circle at 64% 48%, rgba(32,207,132,.2), transparent 42%);
+      filter: blur(20px);
+    }
+
+    .final-orbit,
+    .final-analytics,
+    .final-phone,
+    .final-message {
+      position: absolute;
+    }
+
+    .final-orbit {
+      left: -8%;
+      top: 2%;
+      width: 48%;
+      height: 72%;
+      z-index: 1;
+      opacity: .68;
+      mask-image: linear-gradient(90deg, #000 55%, transparent 100%);
+    }
+    .final-orbit .force-graph {
+      width: 100%;
+      min-height: 100%;
+      border: 0;
+      background: radial-gradient(circle,rgba(27,191,242,.13),transparent 62%);
+      box-shadow: none;
+    }
+    .final-orbit .force-node { min-width: 94px; min-height: 34px; padding: 6px 9px; font-size: 9px; }
+    .final-orbit .force-node img { width: 21px; height: 21px; }
+    .final-orbit .force-node.hub { min-width: 108px; min-height: 48px; }
+    .final-orbit .force-node.hub img { width: 32px; height: 32px; }
+
+    .final-phone {
+      left: 50%;
+      top: -16%;
+      z-index: 4;
+      width: 36%;
+      transform: translateX(-50%) scale(.72);
+      transform-origin: center top;
+      filter: drop-shadow(0 28px 44px rgba(20,115,150,.18));
+    }
+    .final-phone .phone-shell { min-height: 610px; overflow: visible; }
+
+    .final-analytics {
+      right: 0;
+      top: 8%;
+      z-index: 2;
+      width: 30%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 9px;
+    }
+    .final-analytics-head { grid-column: 1 / -1; display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; }
+    .final-analytics-head strong { color:#173d4f; font-size:11px; }
+    .final-analytics-head span { color:#128b68; font-size:8px; font-weight:850; }
+    .final-metric {
+      min-height: 78px;
+      padding: 11px;
+      display:grid;
+      align-content:center;
+      border-radius:14px;
+      opacity:.9;
+    }
+    .final-metric span { color:#718f9d; font-size:8px; font-weight:850; text-transform:uppercase; }
+    .final-metric strong { color:#0b3547; font-size:22px; line-height:1.2; }
+    .final-mini-bars { grid-column:1/-1; padding:12px 13px; border-radius:14px; }
+    .final-mini-bars > span { color:#6f8d9a; font-size:8px; font-weight:850; }
+    .final-mini-row { display:grid; grid-template-columns:42px 1fr auto; align-items:center; gap:6px; margin-top:7px; color:#466d7d; font-size:8px; font-weight:800; }
+    .final-mini-track { height:5px; overflow:hidden; border-radius:99px; background:rgba(27,191,242,.1); }
+    .final-mini-track i { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#1bbff2,#20cf84); }
+
+    .final-message {
+      left: 50%;
+      bottom: 0;
+      z-index: 6;
+      width: min(650px, 58%);
+      transform: translateX(-50%);
+      display:grid;
+      justify-items:center;
+      gap:5px;
+      text-align:center;
+      padding: 13px 24px 10px;
+      border-top:1px solid rgba(255,255,255,.8);
+      border-radius:24px 24px 0 0;
+      background:linear-gradient(180deg,rgba(248,254,255,.8),rgba(236,251,255,.58));
+      box-shadow:0 -18px 54px rgba(35,145,184,.12),inset 0 1px 0 #fff;
+      backdrop-filter:blur(24px) saturate(160%);
+    }
+    .final-message .final-badge { min-height:22px; padding:5px 10px; font-size:8px; }
+    .final-message .final-title { font-size:clamp(54px,6vw,88px); line-height:.9; }
+    .final-message .final-copy { max-width:570px; font-size:clamp(10px,.92vw,13px); line-height:1.3; }
+    .final-message .final-names { font-size:11px; }
+    .final-message .final-cta { min-height:28px; padding:6px 12px; font-size:9px; }
+
+    .final-spark {
+      position:absolute;
+      z-index:0;
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:#1bbff2;
+      box-shadow:0 0 0 5px rgba(27,191,242,.1),0 0 20px rgba(27,191,242,.42);
+    }
+
     @media (max-aspect-ratio: 4 / 3) {
       .slide {
         padding: 62px 44px 42px;
@@ -1844,6 +1988,7 @@
     import React, { useEffect, useRef, useState } from "https://esm.sh/react@18.3.1";
     import { createRoot } from "https://esm.sh/react-dom@18.3.1/client";
     import { AnimatePresence, motion } from "https://esm.sh/framer-motion@11.18.2?deps=react@18.3.1,react-dom@18.3.1";
+    import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "https://esm.sh/recharts@2.15.1?deps=react@18.3.1,react-dom@18.3.1";
 
     const h = React.createElement;
     const M = motion;
@@ -1911,25 +2056,50 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
 
     function buildDashboardFromCsv(text) {
       const rows = parseCsvTable(text);
-      const names = rows.Nome_real || [];
+      const names = (rows.Nome_real || []).map((value) => value.trim());
+      const nicknames = (rows.Nome_apelido || []).map((value) => value.trim());
       const statuses = (rows.Ativo_desativo || []).map((status) => status.toLowerCase().trim());
+      const themes = (rows.Tema || []).map((theme) => theme.toLowerCase().trim());
+      const colors = (rows["Personalização"] || []).map((color) => color.toLowerCase().trim());
+      const bios = (rows.Bio || []).map((bio) => bio.trim());
+      const createdDates = rows["Criação_conta"] || [];
+      const updatedDates = rows["Atualizações_conta"] || [];
       const active = statuses.filter((status) => status.startsWith("ativ")).length;
       const inactive = Math.max(0, names.length - active);
-      const themeCounts = countBy(rows.Tema || [], (theme) => theme.toLowerCase().trim());
-      const colorCounts = Object.entries(countBy(rows["Personalização"] || [], (color) => color.toLowerCase().trim()))
+      const themeCounts = countBy(themes);
+      const colorCounts = Object.entries(countBy(colors))
         .sort((a, b) => b[1] - a[1]);
-      const yearCounts = Object.entries(countBy(rows["Atualizações_conta"] || [], (date) => date.split("/")[2]))
+      const updateCounts = Object.entries(countBy(updatedDates, (date) => date.split("/")[2]))
         .filter(([year]) => year)
         .sort((a, b) => Number(a[0]) - Number(b[0]));
-      const lastUpdates = names.map((name, index) => ({
+      const creationCounts = Object.entries(countBy(createdDates, (date) => date.split("/")[2]))
+        .filter(([year]) => year)
+        .sort((a, b) => Number(a[0]) - Number(b[0]));
+      const allYears = [...new Set([...creationCounts.map(([year]) => year), ...updateCounts.map(([year]) => year)])]
+        .sort((a, b) => Number(a) - Number(b));
+      let cumulativeUsers = 0;
+      const evolution = allYears.map((year) => {
+        cumulativeUsers += Number(creationCounts.find(([itemYear]) => itemYear === year)?.[1] || 0);
+        return {
+          date: year,
+          users: cumulativeUsers,
+          updates: Number(updateCounts.find(([itemYear]) => itemYear === year)?.[1] || 0),
+        };
+      });
+      const users = names.map((name, index) => ({
         name,
+        nickname: nicknames[index] || "-",
         status: statuses[index]?.startsWith("ativ") ? "Ativo" : "Inativo",
+        theme: themes[index] || "-",
+        color: colors[index] || "-",
+        bio: bios[index] || "-",
+        createdAt: createdDates[index] || "-",
         updatedAt: rows["Atualizações_conta"]?.[index] || "-",
       })).sort((a, b) => {
         const [da, ma, ya] = a.updatedAt.split("/").map(Number);
         const [db, mb, yb] = b.updatedAt.split("/").map(Number);
         return new Date(yb, mb - 1, db) - new Date(ya, ma - 1, da);
-      }).slice(0, 4);
+      });
 
       return {
         source: "dados.csv",
@@ -1944,8 +2114,13 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
           ["Tema escuro", themeCounts.escuro || 0],
         ],
         colors: colorCounts.slice(0, 5),
-        updates: yearCounts,
-        lastUpdates,
+        updates: updateCounts,
+        evolution,
+        users,
+        bios: Object.entries(countBy(bios, (bio) => bio.toLowerCase())).map(([name, value]) => ({ name, value })),
+        uniqueColors: colorCounts.length,
+        latestUpdate: users[0]?.updatedAt || "-",
+        oldestCreation: [...createdDates].sort((a, b) => Number(a.split("/")[2]) - Number(b.split("/")[2]))[0] || "-",
       };
     }
 
@@ -2049,17 +2224,17 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
       return `M ${sx} ${sy} Q ${cx} ${cy} ${tx} ${ty}`;
     }
 
-    function buildOrbitalGraph(width, height, elapsedSeconds) {
+    function buildOrbitalGraph(width, height, elapsedSeconds, sourceNodes = graphNodes) {
       const centerX = width / 2;
       const centerY = height / 2;
       const padX = 86;
       const padY = 66;
-      const orbitNodes = graphNodes.filter((node) => !node.hub);
+      const orbitNodes = sourceNodes.filter((node) => !node.hub);
       const orbitSpeed = elapsedSeconds * 0.105;
       const rx = Math.max(188, Math.min(width * 0.36, width / 2 - padX));
       const ry = Math.max(132, Math.min(height * 0.33, height / 2 - padY));
 
-      const nodes = graphNodes.map((node) => {
+      const nodes = sourceNodes.map((node) => {
         if (node.hub) {
           return {
             ...node,
@@ -2084,7 +2259,7 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
       });
 
       const nodeById = Object.fromEntries(nodes.map((node) => [node.id, node]));
-      const links = graphLinks.map((link) => ({
+      const links = sourceNodes.filter((node) => !node.hub).map((node) => ({ source: "linkwave", target: node.id })).map((link) => ({
         ...link,
         source: nodeById[link.source],
         target: nodeById[link.target],
@@ -2093,7 +2268,7 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
       return { width, height, nodes, links };
     }
 
-    function ForceDirectedLinkGraph() {
+    function ForceDirectedLinkGraph({ simplified = false } = {}) {
       const containerRef = useRef(null);
       const [graph, setGraph] = useState({ nodes: [], links: [], width: 0, height: 0 });
       const [hovered, setHovered] = useState(null);
@@ -2113,7 +2288,9 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
         };
 
         const renderOrbit = (now) => {
-          setGraph(buildOrbitalGraph(width, height, (now - startedAt) / 1000));
+          const finalNodeIds = new Set(["linkwave","instagram","youtube","tiktok","github","whatsapp","portfolio"]);
+          const sourceNodes = simplified ? graphNodes.filter((node) => finalNodeIds.has(node.id)) : graphNodes;
+          setGraph(buildOrbitalGraph(width, height, (now - startedAt) / 1000, sourceNodes));
           animationFrame = requestAnimationFrame(renderOrbit);
         };
 
@@ -2338,75 +2515,172 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
       );
     }
 
-    function DashboardSlide({ data }) {
-      const maxUpdates = Math.max(...data.updates.map(([, value]) => value), 1);
-      const totalThemes = data.themes.reduce((sum, [, value]) => sum + value, 0) || 1;
-      const maxColors = Math.max(...data.colors.map(([, value]) => value), 1);
-      const points = data.updates.map(([year, value], index) => {
-        const x = 34 + index * (420 / Math.max(data.updates.length - 1, 1));
-        const y = 148 - (value / maxUpdates) * 104;
-        return { year, value, x, y };
-      });
-      const path = points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x},${point.y}`).join(" ");
+    function ChartTooltip({ active, payload, label }) {
+      if (!active || !payload?.length) return null;
+      return h("div", { className:"chart-tooltip" },
+        h("strong", null, label || payload[0]?.name),
+        payload.map((entry) => h("div", { key:entry.dataKey, style:{ color:entry.color || "#fff", marginTop:3 } }, `${entry.name}: ${Number(entry.value).toLocaleString("pt-BR")}`))
+      );
+    }
 
-      return h("div", { className: "dashboard" },
-        h("div", { className: "dash-header" },
-          h("div", { className: "stack" },
-            h(Kicker, null, "Ciência de Dados / Analytics"),
-            h(M.h2, { variants: itemVariants }, "Dashboard real da base de usuários.")
+    function DashboardSlide({ data }) {
+      const [range, setRange] = useState("30 dias");
+      const maxYearActivity = Math.max(...data.evolution.map((point) => point.updates), 1);
+      const heat = data.evolution.map((point) => Math.max(.12, point.updates / maxYearActivity));
+      const icon = (name, color="159e77") => iconify(name, color);
+      const panelHead = (title, meta) => h("div",{className:"panel-head"},h("h3",null,title),h("span",null,meta));
+      const themeData = data.themes.map(([name, value], index) => ({ name, value, color:["#1bbff2","#20cf84"][index] }));
+      const activities = data.users.slice(0, 6).map((user) => [user.name, "atualizou o perfil", user.updatedAt, "solar:user-check-rounded-bold-duotone"]);
+      const stats = [
+        ["Usuários", data.totals.users, "base completa", `${data.totals.users} registros no CSV`, "solar:users-group-rounded-bold-duotone"],
+        ["Usuários ativos", data.totals.active, `${data.totals.activeRate}% da base`, "status ativo", "solar:user-check-rounded-bold-duotone"],
+        ["Usuários inativos", data.totals.inactive, `${100-data.totals.activeRate}% da base`, "status inativo", "solar:user-block-rounded-bold-duotone"],
+        ["Taxa ativa", `${data.totals.activeRate}%`, `${data.totals.active}/${data.totals.users}`, "usuários ativos", "solar:graph-up-bold-duotone"],
+        ["Temas disponíveis", data.themes.filter(([,value])=>value>0).length, "claro e escuro", "preferências registradas", "solar:palette-bold-duotone"],
+        ["Personalizações", data.uniqueColors, `${data.colors[0]?.[1] || 0} usam azul`, "cores únicas", "solar:magic-stick-3-bold-duotone"],
+        ["Perfis atualizados", data.updates.reduce((sum,[,value])=>sum+value,0), data.latestUpdate, "atualização mais recente", "solar:refresh-circle-bold-duotone"],
+        ["Primeiro cadastro", data.oldestCreation.split("/")[2] || "-", data.oldestCreation, "início da base", "solar:calendar-bold-duotone"],
+      ];
+
+      return h(M.div, { className:"dashboard", variants:itemVariants },
+        h("header",{className:"dash-appbar"},
+          h("div",{className:"dash-title"},
+            h("div",{className:"dash-brand"},h("img",{src:"./imgs/icon.png",alt:""}),h("strong",null,"LinkWave Admin")),
+            h("span",{className:"dash-breadcrumb"},"Workspace / Visão geral")
           ),
-          h(M.div, { className: "dash-source", variants: itemVariants }, `Fonte: ${data.source} • ${data.totals.users} registros analisados`)
+          h("div",{className:"dash-actions"},
+            h("div",{className:"dash-filter"},
+              ["Hoje","7 dias","30 dias","90 dias","Todos"].map((item)=>h("button",{key:item,className:range===item?"active":"",onClick:()=>setRange(item)},item))
+            ),
+            h("div",{className:"dash-user"},"CF")
+          )
         ),
-        h(M.div, { className: "dash-kpis", variants: groupVariants },
-          [
-            ["Usuários", data.totals.users],
-            ["Ativos", data.totals.active],
-            ["Inativos", data.totals.inactive],
-            ["Taxa ativa", `${data.totals.activeRate}%`],
-          ].map(([label, value]) => h(Card, { key: label, className: "exec-kpi" }, h("span", null, label), h("strong", null, value)))
-        ),
-        h("div", { className: "dash-main" },
-          h(Card, { className: "dash-panel" },
-            h("div", { className: "panel-head" }, h("h3", null, "Atualizações por ano"), h("span", null, "linha temporal")),
-            h("svg", { className: "exec-line", viewBox: "0 0 500 180", role: "img", "aria-label": "Atualizações de conta por ano" },
-              h("defs", null,
-                h("linearGradient", { id: "lineGradient", x1: "0", x2: "1" },
-                  h("stop", { offset: "0%", stopColor: "#1bbff2" }),
-                  h("stop", { offset: "100%", stopColor: "#20cf84" })
+        h("div",{className:"dash-scroll"},
+          h("main",{className:"dash-canvas"},
+            h("section",{className:"dash-intro"},
+              h("div",null,h("h2",null,"Visão geral"),h("p",null,"Performance da plataforma, engajamento e operações em um só lugar.")),
+              h("div",{className:"dash-live"},`Dados sincronizados • ${data.source}`)
+            ),
+            h(M.section,{className:"dash-kpis",variants:groupVariants},
+              stats.map(([label,value,trend,compare,iconName])=>
+                h(M.article,{className:"exec-kpi",key:label,variants:itemVariants,whileHover:{y:-3}},
+                  h("div",{className:"kpi-icon"},h("img",{src:icon(iconName),alt:""})),
+                  h("span",{className:"kpi-label"},label),
+                  h("span",{className:"kpi-trend"},trend),
+                  h("strong",{className:"kpi-value"},value),
+                  h("span",{className:"kpi-compare"},compare)
                 )
-              ),
-              [44, 96, 148].map((y) => h("line", { key: y, x1: "28", x2: "468", y1: y, y2: y, stroke: "rgba(20, 80, 105, 0.11)", strokeWidth: "1" })),
-              h(M.path, { d: path, fill: "none", stroke: "url(#lineGradient)", strokeWidth: "4", strokeLinecap: "round", strokeLinejoin: "round", initial: { pathLength: 0 }, animate: { pathLength: 1 }, transition: { duration: 1.1 } }),
-              points.map((point) => h(M.g, { key: point.year, initial: { opacity: 0, scale: 0.6 }, animate: { opacity: 1, scale: 1 }, transition: { delay: 0.25 } },
-                h("circle", { cx: point.x, cy: point.y, r: "6", fill: "#ffffff", stroke: "#1bbff2", strokeWidth: "3" }),
-                h("text", { className: "axis-label", x: point.x, y: 170, textAnchor: "middle" }, point.year),
-                h("text", { className: "axis-label", x: point.x, y: point.y - 12, textAnchor: "middle" }, point.value)
-              ))
-            )
-          ),
-          h("div", { className: "stack" },
-            h(Card, { className: "dash-panel" },
-              h("div", { className: "panel-head" }, h("h3", null, "Temas usados"), h("span", null, "distribuição")),
-              h("div", { className: "split-bars" },
-                data.themes.map(([label, value]) => h("div", { className: "split-item", key: label },
-                  h("div", { className: "split-label" }, h("span", null, label), h("strong", null, `${Math.round(value / totalThemes * 100)}%`)),
-                  h("div", { className: "split-track" }, h(M.div, { className: "split-fill", initial: { width: 0 }, animate: { width: `${value / totalThemes * 100}%` }, transition: { duration: 0.8 } }))
+              )
+            ),
+            h(M.section,{className:"dash-panel chart-main",variants:itemVariants},
+              panelHead("Evolução da base de usuários",`Cadastros e atualizações • ${range}`),
+              h("div",{className:"chart-wrap"},
+                h(ResponsiveContainer,{width:"100%",height:"100%"},
+                  h(AreaChart,{data:data.evolution,margin:{top:8,right:5,left:-20,bottom:0}},
+                    h("defs",null,
+                      h("linearGradient",{id:"clickGradient",x1:"0",y1:"0",x2:"0",y2:"1"},h("stop",{offset:"0%",stopColor:"#1bbff2",stopOpacity:.35}),h("stop",{offset:"100%",stopColor:"#1bbff2",stopOpacity:0})),
+                      h("linearGradient",{id:"linkGradient",x1:"0",y1:"0",x2:"0",y2:"1"},h("stop",{offset:"0%",stopColor:"#20cf84",stopOpacity:.25}),h("stop",{offset:"100%",stopColor:"#20cf84",stopOpacity:0}))
+                    ),
+                    h(CartesianGrid,{stroke:"rgba(34,104,130,.09)",vertical:false}),
+                    h(XAxis,{dataKey:"date",axisLine:false,tickLine:false,tick:{fontSize:8,fill:"#7895a2"}}),
+                    h(YAxis,{axisLine:false,tickLine:false,tick:{fontSize:8,fill:"#7895a2"}}),
+                    h(Tooltip,{content:h(ChartTooltip)}),
+                    h(Legend,{iconType:"circle",iconSize:6,wrapperStyle:{fontSize:8}}),
+                    h(Area,{type:"monotone",dataKey:"users",name:"Usuários acumulados",stroke:"#1bbff2",strokeWidth:2,fill:"url(#clickGradient)",animationDuration:1200}),
+                    h(Area,{type:"monotone",dataKey:"updates",name:"Atualizações",stroke:"#20cf84",strokeWidth:2,fill:"url(#linkGradient)",animationDuration:1400})
+                  )
+                )
+              )
+            ),
+            h(M.aside,{className:"dash-panel activity-panel",variants:itemVariants},
+              panelHead("Atividade recente","ao vivo"),
+              h("div",{className:"activity-list"},
+                activities.map(([actor,action,time,iconName])=>h("div",{className:"activity-item",key:actor+time},
+                  h("div",{className:"activity-dot"},h("img",{src:icon(iconName),alt:""})),
+                  h("div",{className:"activity-copy"},h("strong",null,actor),h("span",null,action)),
+                  h("span",{className:"activity-time"},time)
                 ))
               )
             ),
-            h(Card, { className: "dash-panel" },
-              h("div", { className: "panel-head" }, h("h3", null, "Top personalizações"), h("span", null, "cores")),
-              h("div", { className: "table-list" },
-                data.colors.map(([color, value]) => h("div", { className: "table-row", key: color },
-                  h("strong", null, color),
-                  h("span", null, `${value} usuário${value > 1 ? "s" : ""}`)
-                ))
+            h(M.section,{className:"dash-panel rank-panel",variants:itemVariants},
+              panelHead("Perfis atualizados recentemente","ordem por atualização"),
+              h("table",{className:"premium-table"},
+                h("thead",null,h("tr",null,["#","Nome","Status","Tema","Cor","Atualizado"].map((x)=>h("th",{key:x},x)))),
+                h("tbody",null,data.users.slice(0,5).map((user,index)=>h("tr",{key:user.name},
+                  h("td",{className:"rank-position"},String(index+1).padStart(2,"0")),
+                  h("td",null,h("div",{className:"rank-user"},h("span",{className:"rank-avatar"},user.name.split(" ").map(x=>x[0]).slice(0,2).join("")),user.name)),
+                  [user.status,user.theme,user.color,user.updatedAt].map((cell,i)=>h("td",{key:i},cell))
+                )))
               )
+            ),
+            h(M.section,{className:"dash-panel theme-panel",variants:itemVariants},
+              panelHead("Distribuição de temas","preferências"),
+              h("div",{className:"theme-content"},
+                h(ResponsiveContainer,{width:"100%",height:145},h(PieChart,null,
+                  h(Pie,{data:themeData,dataKey:"value",nameKey:"name",innerRadius:38,outerRadius:58,paddingAngle:4,animationDuration:1000},
+                    themeData.map((entry)=>h(Cell,{key:entry.name,fill:entry.color,stroke:"transparent"}))
+                  ),
+                  h(Tooltip,{content:h(ChartTooltip)})
+                )),
+                h("div",{className:"theme-legend"},themeData.map((item)=>h("div",{className:"legend-row",key:item.name},
+                  h("span",{className:"legend-swatch",style:{background:item.color}}),h("span",null,item.name),h("strong",null,`${item.value} usuários`)
+                )))
+              )
+            ),
+            h(M.section,{className:"dash-panel mini-chart",variants:itemVariants},
+              panelHead("Categorias de perfil","bios cadastradas"),
+              h("div",{className:"chart-wrap"},h(ResponsiveContainer,{width:"100%",height:"100%"},h(BarChart,{data:data.bios.slice(0,5),layout:"vertical",margin:{top:0,right:8,left:5,bottom:0}},
+                h(XAxis,{type:"number",hide:true}),h(YAxis,{type:"category",dataKey:"name",axisLine:false,tickLine:false,width:55,tick:{fontSize:8,fill:"#668895"}}),
+                h(Tooltip,{content:h(ChartTooltip)}),h(Bar,{dataKey:"value",name:"Usuários",fill:"#1bbff2",radius:[0,6,6,0],animationDuration:1200})
+              )))
+            ),
+            h(M.section,{className:"dash-panel heat-panel",variants:itemVariants},
+              panelHead("Intensidade de atualizações","por ano • dados do CSV"),
+              h("div",{className:"heat-grid"},heat.map((value,index)=>h(M.span,{className:"heat-cell",key:index,style:{"--heat":value},initial:{opacity:0},animate:{opacity:1},transition:{delay:index*.012}}))),
+              h("div",{className:"heat-labels"},data.evolution.map((point)=>h("span",{key:point.date},point.date)))
+            ),
+            h(M.section,{className:"dash-panel recent-panel",variants:itemVariants},
+              panelHead("Eventos do sistema","audit log"),
+              h("div",{className:"event-stream"},activities.map(([actor,action,time,iconName])=>h("div",{className:"event-card",key:actor+action},
+                h("div",{className:"activity-dot"},h("img",{src:icon(iconName),alt:""})),
+                h("div",null,h("strong",null,`${actor} ${action}`),h("span",null,time))
+              )))
             )
           )
-        ),
-        h(M.div, { className: "card-grid grid-3", variants: groupVariants },
-          data.lastUpdates.slice(0, 3).map((row) => h(Card, { key: row.name, className: "metric-card" }, h("h3", null, row.name), h("p", null, `${row.status} • atualizado em ${row.updatedAt}`)))
+        )
+      );
+    }
+
+    function FinalAnalyticsPanel({ data }) {
+      const themeTotal = data.themes.reduce((sum, [, value]) => sum + value, 0) || 1;
+      const metrics = [
+        ["Usuários", data.totals.users],
+        ["Ativos", data.totals.active],
+        ["Taxa ativa", `${data.totals.activeRate}%`],
+        ["Temas", data.themes.filter(([, value]) => value > 0).length],
+      ];
+      return h(M.aside, {
+        className: "final-analytics",
+        initial: { opacity: 0, x: 70, filter: "blur(8px)" },
+        animate: { opacity: .92, x: 0, filter: "blur(0px)" },
+        transition: { duration: .85, delay: 1.02, ease: [0.22, 1, 0.36, 1] },
+      },
+        h("div", { className: "final-analytics-head" }, h("strong", null, "Analytics"), h("span", null, "● DADOS REAIS")),
+        metrics.map(([label, value]) => h(Card, { className: "final-metric", key: label },
+          h("span", null, label),
+          h("strong", null, value)
+        )),
+        h(Card, { className: "final-mini-bars" },
+          h("span", null, "Preferência de tema"),
+          data.themes.map(([label, value]) => h("div", { className: "final-mini-row", key: label },
+            h("span", null, label.replace("Tema ", "")),
+            h("div", { className: "final-mini-track" }, h(M.i, {
+              initial: { width: 0 },
+              animate: { width: `${value / themeTotal * 100}%` },
+              transition: { duration: .8, delay: 1.5 }
+            })),
+            h("strong", null, `${Math.round(value / themeTotal * 100)}%`)
+          ))
         )
       );
     }
@@ -2627,21 +2901,38 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
           )
         )
       ),
-      ({ direction }) => h(SlideFrame, { direction },
-        h("div", { className: "final-slide" },
+      ({ direction, dashboardData }) => h(SlideFrame, { direction },
+        h("div", { className: "final-poster" },
+          [[8,18],[18,72],[78,12],[89,64],[70,78]].map(([left,top],index)=>h(M.span,{
+            className:"final-spark",key:index,style:{left:`${left}%`,top:`${top}%`},
+            animate:{opacity:[.2,.9,.2],scale:[.7,1.35,.7]},
+            transition:{duration:3+index*.35,repeat:Infinity,delay:index*.3}
+          })),
+          h("div", { className: "final-phone" },
+            h(M.div, {
+              initial: { opacity: 0, y: 30, scale: .92 },
+              animate: { opacity: 1, y: 0, scale: 1 },
+              transition: { duration: .8, delay: .12, ease: [0.22, 1, 0.36, 1] }
+            }, h(PhoneMockup, { focus: true, interactive: true }))
+          ),
           h(M.div, {
-            className: "final-card",
-            variants: groupVariants,
-            initial: "hidden",
-            animate: "show",
-            whileHover: { y: -4, scale: 1.01, transition: { duration: 0.28 } },
+            className: "final-orbit",
+            initial: { opacity: 0, x: -90, filter: "blur(8px)" },
+            animate: { opacity: .68, x: 0, filter: "blur(0px)" },
+            transition: { duration: .9, delay: .62, ease: [0.22, 1, 0.36, 1] }
+          }, h(ForceDirectedLinkGraph, { simplified: true })),
+          h(FinalAnalyticsPanel, { data: dashboardData || csvDashboard }),
+          h(M.div, {
+            className: "final-message",
+            initial: { opacity: 0, x: "-50%", y: 35, scale: .96 },
+            animate: { opacity: 1, x: "-50%", y: 0, scale: 1 },
+            transition: { duration: .8, delay: 1.46, ease: [0.22, 1, 0.36, 1] }
           },
-            h(M.div, { className: "final-logo", variants: itemVariants, whileHover: { rotate: 2, scale: 1.04 } }, h("img", { src: "imgs/icon.png", alt: "LinkWave" })),
-            h(M.div, { className: "final-badge", variants: itemVariants }, "CONCLUSÃO"),
-            h(M.div, { className: "final-title", variants: itemVariants }, "Obrigado!"),
-            h(M.p, { className: "final-copy", variants: itemVariants }, "O LinkWave centraliza presença digital, personalização e dados em uma única experiência profissional."),
-            h(M.div, { className: "final-names", variants: itemVariants }, "Lucas • CAFÉ • Emy"),
-            h(M.div, { className: "final-cta", variants: itemVariants }, "Links para criadores, do seu jeito.")
+            h("div", { className: "final-badge" }, "CONCLUSÃO"),
+            h("div", { className: "final-title" }, "Obrigado!"),
+            h("p", { className: "final-copy" }, "Obrigado por acompanhar nossa apresentação. O LinkWave centraliza toda a presença digital em uma plataforma moderna, personalizável e escalável."),
+            h("div", { className: "final-names" }, "Lucas • CAFÉ • Emy"),
+            h("div", { className: "final-cta" }, "Links para criadores, do seu jeito.")
           )
         )
       ),

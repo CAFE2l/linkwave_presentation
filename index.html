@@ -2756,40 +2756,6 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
       );
     }
 
-    function FinalAnalyticsPanel({ data }) {
-      const themeTotal = data.themes.reduce((sum, [, value]) => sum + value, 0) || 1;
-      const metrics = [
-        ["Usuários", data.totals.users],
-        ["Ativos", data.totals.active],
-        ["Taxa ativa", `${data.totals.activeRate}%`],
-        ["Temas", data.themes.filter(([, value]) => value > 0).length],
-      ];
-      return h(M.aside, {
-        className: "final-analytics",
-        initial: { opacity: 0, x: 70, filter: "blur(8px)" },
-        animate: { opacity: .92, x: 0, filter: "blur(0px)" },
-        transition: { duration: .85, delay: 1.02, ease: [0.22, 1, 0.36, 1] },
-      },
-        h("div", { className: "final-analytics-head" }, h("strong", null, "Analytics"), h("span", null, "● DADOS REAIS")),
-        metrics.map(([label, value]) => h(Card, { className: "final-metric", key: label },
-          h("span", null, label),
-          h("strong", null, value)
-        )),
-        h(Card, { className: "final-mini-bars" },
-          h("span", null, "Preferência de tema"),
-          data.themes.map(([label, value]) => h("div", { className: "final-mini-row", key: label },
-            h("span", null, label.replace("Tema ", "")),
-            h("div", { className: "final-mini-track" }, h(M.i, {
-              initial: { width: 0 },
-              animate: { width: `${value / themeTotal * 100}%` },
-              transition: { duration: .8, delay: 1.5 }
-            })),
-            h("strong", null, `${Math.round(value / themeTotal * 100)}%`)
-          ))
-        )
-      );
-    }
-
     function Shell({ current, setCurrent, children }) {
       return h("div", { className: "presentation-stage" },
         h("div", { className: "aero-layer" }),
@@ -3006,7 +2972,7 @@ Atualizações_conta,17/08/2019,17/06/2026,20/07/2018,02/03/2017,31/03/2025,12/0
           )
         )
       ),
-      ({ direction, dashboardData }) => h(SlideFrame, { direction },
+      ({ direction }) => h(SlideFrame, { direction },
         h("div", { className: "final-poster" },
           [[8,18],[18,72],[78,12],[89,64],[70,78]].map(([left,top],index)=>h(M.span,{
             className:"final-spark",key:index,style:{left:`${left}%`,top:`${top}%`},
